@@ -78,6 +78,15 @@ const getShortDayName = (date) => {
     return days[new Date(date).getDay()]; // Returns short day name
 };
 
+// Function to check if a given date is a weekend (Saturday or Sunday)
+const isWeekend = (dateKey) => {
+    const [month, day, year] = dateKey.split('/').map(Number); // Split dateKey into parts
+    const date = new Date(year, month - 1, day); // Create a Date object
+    const dayOfWeek = date.getDay(); // Get the day of the week
+    return dayOfWeek === 0 || dayOfWeek === 6; // Sunday (0) or Saturday (6)
+};
+
+
 // Initialize calendar with data from memory
 const generateCalendar = () => {
     const calendar = document.getElementById("calendar");
@@ -98,9 +107,11 @@ const generateCalendar = () => {
         for (let day = 1; day <= daysInMonth; day++) {
             const dateKey = `${monthIndex + 1}/${day}/2025`;
             const currentDate = new Date(2025, monthIndex, day);
+            const isHoliday = stockMarketHolidays.includes(dateKey);
+            const isWeekendDay = isWeekend(dateKey);
 
             // Skip future dates and holidays
-            if (currentDate > today || stockMarketHolidays.includes(dateKey)) continue;
+            if (currentDate > today || isHoliday || isWeekendDay) continue;
 
             const profit = parseFloat(savedData[dateKey] ?.profit || 0);
             const trades = parseInt(savedData[dateKey] ?.trades || 0);
@@ -109,7 +120,7 @@ const generateCalendar = () => {
             monthlyProfit += profit;
 
             // Count days based on conditions
-            if (trades > 0) zeroTradesCount++;
+            if (trades == 0) zeroTradesCount++;
             if (profit > 0) profitDaysCount++;
             if (profit < 0) lossDaysCount++;
         }
@@ -118,17 +129,8 @@ const generateCalendar = () => {
         // Create month header with statistics
         const monthHeader = document.createElement("div");
         monthHeader.className = "month";
-        monthHeader.textContent = `${month} (Total Profit: ${monthlyProfit.toFixed(2)} CAD, No Trades: ${zeroTradesCount}, Profit Days: ${profitDaysCount}, Loss Days: ${lossDaysCount})`;
+        monthHeader.textContent = `${month} (Total Profit: ${monthlyProfit.toFixed(2)} CAD, No Trade: ${zeroTradesCount}, Profit Days: ${profitDaysCount}, Loss Days: ${lossDaysCount})`;
         calendar.appendChild(monthHeader);
-
-
-        // Function to check if a given date is a weekend (Saturday or Sunday)
-        const isWeekend = (dateKey) => {
-            const [month, day, year] = dateKey.split('/').map(Number); // Split dateKey into parts
-            const date = new Date(year, month - 1, day); // Create a Date object
-            const dayOfWeek = date.getDay(); // Get the day of the week
-            return dayOfWeek === 0 || dayOfWeek === 6; // Sunday (0) or Saturday (6)
-        };
 
         // Inside the generateCalendar function, update the day display to check for weekends and holidays
         const createDayElement = (dateKey, isHoliday, isWeekend) => {
@@ -158,7 +160,7 @@ const generateCalendar = () => {
             const isHoliday = stockMarketHolidays.includes(dateKey);
             const isWeekendDay = isWeekend(dateKey);
 
-            const dayElement = createDayElement(dateKey, isHoliday, isWeekend(dateKey)); // Pass both holiday and weekend status
+            const dayElement = createDayElement(dateKey, isHoliday, isWeekendDay); // Pass both holiday and weekend status
 
             const createStockNameField = () => {
                 const inputGroup = document.createElement("div");
