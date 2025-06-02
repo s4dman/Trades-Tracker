@@ -8,7 +8,7 @@ let savedData = {};
 // Save data to a CSV file
 const saveToSpreadsheet = () => {
     const rows = [
-        ["Date", "Underlying", "Profit (CAD)", "Number of Trades"]
+        ["Date", "Underlying", "Profit ($)", "Number of Trades"]
     ];
     for (const [date, data] of Object.entries(savedData)) {
         rows.push([date, data.stockName || "", data.profit || "", data.trades || ""]);
