@@ -92,7 +92,7 @@ const generateCalendar = () => {
     const calendar = document.getElementById("calendar");
     calendar.innerHTML = ""; // Clear existing calendar
 
-    const stockOptions = ['', '-', 'SPY', 'QQQ', 'NVDA', 'AAPL', 'AMD', 'META', 'TSLA']; // Stock options
+    const stockOptions = ['', '-', 'SPY', 'QQQ', 'NVDA', 'AAPL', 'AMD', 'PLTR']; // Stock options
 
     const today = new Date();
 
