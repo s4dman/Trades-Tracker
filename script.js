@@ -8,7 +8,7 @@ let savedData = {};
 // Save data to a CSV file
 const saveToSpreadsheet = () => {
     const rows = [
-        ["Date", "Underlying", "Profit (CAD)", "Number of Trades"]
+        ["Date", "Underlying", "Profit ($)", "Number of Trades"]
     ];
     for (const [date, data] of Object.entries(savedData)) {
         rows.push([date, data.stockName || "", data.profit || "", data.trades || ""]);
@@ -92,7 +92,7 @@ const generateCalendar = () => {
     const calendar = document.getElementById("calendar");
     calendar.innerHTML = ""; // Clear existing calendar
 
-    const stockOptions = ['', '-', 'SPY', 'QQQ', 'NVDA', 'AAPL', 'AMD', 'META', 'TSLA']; // Stock options
+    const stockOptions = ['', '-', 'PLTR', 'AAPL', 'NVDA' , 'AMD']; // Stock options
 
     const today = new Date();
 
@@ -129,7 +129,7 @@ const generateCalendar = () => {
         // Create month header with statistics
         const monthHeader = document.createElement("div");
         monthHeader.className = "month";
-        monthHeader.textContent = `${month} (Total Profit: ${monthlyProfit.toFixed(2)} CAD, No Trade: ${zeroTradesCount}, Profit Days: ${profitDaysCount}, Loss Days: ${lossDaysCount})`;
+        monthHeader.textContent = `${month} (Total Profit: ${monthlyProfit.toFixed(2)} $, No Trade: ${zeroTradesCount}, Profit Days: ${profitDaysCount}, Loss Days: ${lossDaysCount})`;
         calendar.appendChild(monthHeader);
 
         // Inside the generateCalendar function, update the day display to check for weekends and holidays
@@ -209,7 +209,7 @@ const generateCalendar = () => {
                 inputGroup.className = "input-group";
 
                 const label = document.createElement("label");
-                label.textContent = "Profit (CAD):";
+                label.textContent = "Profit ($):";
 
                 const dataField = document.createElement("div");
                 dataField.className = "data-field";
@@ -306,7 +306,7 @@ const loadInitialData = () => {
 // Save data to localStorage for persistence
 const saveToLocalStorage = () => {
     const rows = [
-        ["Date", "Underlying", "Profit (CAD)", "Number of Trades"]
+        ["Date", "Underlying", "Profit ($)", "Number of Trades"]
     ];
     for (const [date, data] of Object.entries(savedData)) {
         rows.push([date, data.stockName || "", data.profit || "", data.trades || ""]);
